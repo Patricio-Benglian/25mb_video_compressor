@@ -10,7 +10,7 @@ def find_file():
     print(f"Filepath is {file_path}")
   return file_path
 
-def compress(file_path):
+def compress(file_path, target_filesize=25):
   pass
 
 def find_save_directory():
