@@ -2,20 +2,27 @@
 
 import ffmpeg
 import os
-import tkinter as tk
 from tkinter import filedialog
 
-# From what I understand, this creates the 'parent' window
-# Other windows (filedialog) become child windows of it
-root = tk.Tk()
-root.withdraw()  # Commenting this out will open filedialog AND the root window
-
-file_path = filedialog.askopenfilename()
+def find_file():
+  file_path = filedialog.askopenfilename()
+  if file_path:
+    print(f"Filepath is {file_path}")
+  return file_path
 
 def compress(file_path):
-  print(f"Filepath is {file_path}")
+  pass
 
+def find_save_directory():
+  save_directory = filedialog.askdirectory()
+  if save_directory:
+    print(f"Saving to {save_directory}")
+  return save_directory
+
+file_path = find_file()
 compress(file_path)
+save_directory = find_save_directory()
+
 
 
 
