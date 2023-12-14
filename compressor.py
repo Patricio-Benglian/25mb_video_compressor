@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 
-from filepath_func import find_file, find_save_directory
 import ffmpeg
 import os
+from tkinter import filedialog
 
 def compress(file_path, target_filesize=25):
   file_info = ffmpeg.probe(file_path)
@@ -63,7 +63,7 @@ def compress(file_path, target_filesize=25):
   output_file_path = os.path.join(save_directory, output_filename)
   print(f"Saving file in: {output_file_path}")
 
-  # Run the first pass to estimate the bitrate
+  # Save the new video
   input_pass = ffmpeg.input(file_path)
   output_pass = input_pass.output(output_file_path,
     acodec='aac',
@@ -72,6 +72,20 @@ def compress(file_path, target_filesize=25):
     audio_bitrate=new_audio_bitrate,
     format='mp4')
   ffmpeg.run(output_pass)
+
+  
+def find_file():
+  file_path = filedialog.askopenfilename()
+  if file_path:
+    print(f"Filepath is {file_path}")
+  return file_path
+
+def find_save_directory():
+  save_directory = filedialog.askdirectory()
+  if save_directory:
+    print(f"Saving to {save_directory}")
+    return save_directory
+  return None
 
 if __name__ == "__main__":
   file_path = find_file()
