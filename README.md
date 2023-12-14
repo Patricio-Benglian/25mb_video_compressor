@@ -31,4 +31,5 @@ ffmpeg-python is a python wrapper for ffmpeg, basically allowing you to execute 
     - Add options for 
         - desired filesize
         - desired codecs?
+        - desired filename
         - probably something else idk
