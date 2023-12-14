@@ -66,9 +66,9 @@ def compress(file_path, target_filesize=25):
   # Run the first pass to estimate the bitrate
   input_pass = ffmpeg.input(file_path)
   output_pass = input_pass.output(output_file_path, acodec='aac',
-    vcodec='hevc', 
+    vcodec='h264', 
     video_bitrate=new_video_bitrate, 
-    audio_bitrate=new_audio_bitrate, 
+    audio_bitrate=new_audio_bitrate,
     format='mp4')
   ffmpeg.run(output_pass)
 
