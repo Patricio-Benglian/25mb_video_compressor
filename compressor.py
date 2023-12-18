@@ -6,6 +6,7 @@ from tkinter import filedialog
 
 def compress(file_path, target_filesize=25):
   file_info = ffmpeg.probe(file_path)
+  # print(file_info)
 
   # Get duration (mult. by bitrate to get filesize)
   duration = float(file_info['format']['duration'])
@@ -35,7 +36,7 @@ def compress(file_path, target_filesize=25):
     # *1000 to go from kilo to megabyte
   target_bitrate = int(target_filesize * 8 * 1000 * 1000 / duration)
   # Reduce it just a little so it doesn't reach target filesize exactly (Just in case?)
-  target_bitrate = int(target_bitrate * 0.99)
+  target_bitrate = int(target_bitrate * 0.95)
 
   print(f"Target Bitrate: {target_bitrate}\n\
     Projected Filesize: {round(target_bitrate * duration / 8 / 1000 / 1000, 2)}")
@@ -64,14 +65,14 @@ def compress(file_path, target_filesize=25):
   print(f"Saving file in: {output_file_path}")
 
   # Save the new video
-  input_pass = ffmpeg.input(file_path)
-  output_pass = input_pass.output(output_file_path,
+  input_vid = ffmpeg.input(file_path)
+  output_vid = input_vid.output(output_file_path,
     acodec='aac',
     vcodec='h264', 
     video_bitrate=new_video_bitrate, 
     audio_bitrate=new_audio_bitrate,
     format='mp4')
-  ffmpeg.run(output_pass)
+  ffmpeg.run(output_vid)
 
   
 def find_file():
