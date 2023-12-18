@@ -1,7 +1,7 @@
 # 25MB Video Compressor
 
-## To broke for discord nitro? Look no further.
-Basically this script allows you to select a file and saves a version with a lowered bitrate so that it's under 25 Megabytes. Currently you run it with
+## "Help, I'm too broke for discord nitro so I can't upload videos over 25mb!" Look no further.
+Basically this script allows you to select a file and saves a version with a lowered bitrate so that it's under 25 megabytes. Currently you run it with
 
 `./compressor.py`
 
@@ -33,3 +33,7 @@ ffmpeg-python is a python wrapper for ffmpeg, basically allowing you to execute 
         - desired codecs?
         - desired filename
         - probably something else idk
+     
+# Bugs (?)
+- One time, it made a video over 25mb. I'm not sure why, I figured it's either overhead (things beyond just the video and audio bitrates) or some quirk that was making it save to a different (slightly higher) bitrate than the one the script chose.
+    - Current workaround is to reduce the target bitrate by 5% and hope it doesn't happen again lol. If it doesn't work I'll find a better way
