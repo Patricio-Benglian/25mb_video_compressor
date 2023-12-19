@@ -23,7 +23,7 @@ def find_save_directory():
 # Creates the main window to store widgets in
 root = tk.Tk()
 root.title("Video Compressor")  # Title of the Window
-root.geometry("720x480")  # Window launch dimensions
+root.geometry("400x250")  # Window launch dimensions
 
 # Create the widgets
 
