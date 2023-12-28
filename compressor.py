@@ -47,8 +47,10 @@ def compress(file_path, target_filesize=25):
     )
 
     # Calculate new bitrate values for desired filesize
-    new_video_bitrate = int(target_bitrate * video_bitrate_ratio)
-    new_audio_bitrate = int(target_bitrate * audio_bitrate_ratio)
+    # reducing audio bitrate ruins the audio quickly, quick patch to fix it
+    new_video_bitrate = int((target_bitrate * video_bitrate_ratio) - (target_bitrate * audio_bitrate_ratio))
+    # new_audio_bitrate = int(target_bitrate * audio_bitrate_ratio)
+    new_audio_bitrate = _audio_bitrate
 
     print(
         f"Total New Bitrate: {new_video_bitrate + new_audio_bitrate}\n\
