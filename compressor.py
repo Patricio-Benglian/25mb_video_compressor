@@ -36,14 +36,16 @@ def compress(file_path, target_filesize=25):
     # *1000 to go from kilo to megabyte
   target_bitrate = int(target_filesize * 8 * 1000 * 1000 / duration)
   # Reduce it just a little so it doesn't reach target filesize exactly (Just in case?)
-  target_bitrate = int(target_bitrate * 0.95)
+  target_bitrate = int(target_bitrate * 0.97)
 
   print(f"Target Bitrate: {target_bitrate}\n\
     Projected Filesize: {round(target_bitrate * duration / 8 / 1000 / 1000, 2)}")
 
   # Calculate new bitrate values for desired filesize
-  new_video_bitrate = int(target_bitrate * video_bitrate_ratio)
-  new_audio_bitrate = int(target_bitrate * audio_bitrate_ratio)
+  # reducing audio bitrate ruins the audio quickly, quick patch to fix it
+  new_video_bitrate = int((target_bitrate * video_bitrate_ratio) - (target_bitrate * audio_bitrate_ratio))
+  # new_audio_bitrate = int(target_bitrate * audio_bitrate_ratio)
+  new_audio_bitrate = _audio_bitrate
 
   print(f"Total New Bitrate: {new_video_bitrate + new_audio_bitrate}\n\
     New Video Bitrate: {new_video_bitrate}\n\
