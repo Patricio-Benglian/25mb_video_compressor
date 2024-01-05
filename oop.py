@@ -46,9 +46,14 @@ class Gui_Window:
     self.file_path = tk.filedialog.askopenfilename()
     if self.file_path:
       print(f"Filepath is {self.file_path}")
-    # Maybe have error text/warning if none selected
     else:
       print("No filepath selected")
+
+    # Temporary measure
+    if self.file_path[-4:] != ".mp4":
+      print ("Currently only support mp4 :/")
+      self.file_path = None
+    # Maybe have error text/warning if none selected
 
   def find_save_directory(self):
     self.save_directory = tk.filedialog.askdirectory()
@@ -63,7 +68,7 @@ class Gui_Window:
       return
     file_path = self.file_path
     file_info = ffmpeg.probe(file_path)
-    # print(file_info)
+
 
     # Get duration (mult. by bitrate to get filesize)
     duration = float(file_info["format"]["duration"])
@@ -121,7 +126,8 @@ class Gui_Window:
     print(f"New filename: {output_filename}")
 
     # Get directory to save to
-    save_directory = filedialog.askdirectory()
+    self.find_save_directory()
+    save_directory = self.save_directory
     if save_directory == None:
         print("No directory selected, exiting...")
         quit()
