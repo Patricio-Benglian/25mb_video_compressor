@@ -1,11 +1,67 @@
 #!/usr/bin/env python
 
 import ffmpeg
+from functools import partial
 import os
 from tkinter import filedialog
+from tkinter import ttk
+import tkinter as tk
 
+class Gui_Window:
+  """Definition of gui instance"""
+  def __init__(self):
+    self.file_path = None
+    self.save_directory = None
+    # Tkinter gfx init
+    self.root = tk.Tk() # Create the base window
+    self.root.title("Video Compressor")  # Title of the Window
+    self.root.geometry("400x250")  # Window launch dimensions
 
-def compress(file_path, target_filesize=25):
+    # Create the widgets
+
+    # Target Filesize Widgets
+    self.size_label = tk.Label(self.root, text="Desired Filesize (MB):")
+    self.size_label.pack(pady=10, padx=30, anchor="w")
+
+    self.size_slider = ttk.Scale(self.root, from_=8, to=500, length=200, orient="horizontal")
+    self.size_slider.set(25)  # Default value
+    self.size_slider.pack(pady=10, padx=30, anchor="w")
+
+    # Video Selection Widgets
+    self.upload_button = tk.Button(self.root, text="Upload File", command=partial(self.find_file))
+    self.upload_button.pack(pady=10, padx=30, anchor="w")
+
+    self.file_label = tk.Label(self.root, text="Selected File: None")  # Needs to update with filename
+    self.file_label.pack(pady=10, padx=30, anchor="w")
+
+    # Compression Widget
+    self.compress_button = tk.Button(self.root, text="Compressor", command=partial(self.compress))
+    self.compress_button.pack(pady=20, padx=30, anchor="w")
+
+    # Loops (like a console)
+    # Updates GUI and checks for events (widget updates)
+    self.root.mainloop()
+
+  def find_file(self):
+    self.file_path = tk.filedialog.askopenfilename()
+    if self.file_path:
+      print(f"Filepath is {self.file_path}")
+    # Maybe have error text/warning if none selected
+    else:
+      print("No filepath selected")
+
+  def find_save_directory(self):
+    self.save_directory = tk.filedialog.askdirectory()
+    if self.save_directory:
+      print(f"Saving to {self.save_directory}")
+    # Maybe have an error text if none was selected?
+    else:
+      print("No file selected")
+
+  def compress(self, target_filesize=25):
+    if self.file_path == None:
+      return
+    file_path = self.file_path
     file_info = ffmpeg.probe(file_path)
     # print(file_info)
 
@@ -65,7 +121,7 @@ def compress(file_path, target_filesize=25):
     print(f"New filename: {output_filename}")
 
     # Get directory to save to
-    save_directory = find_save_directory()
+    save_directory = filedialog.askdirectory()
     if save_directory == None:
         print("No directory selected, exiting...")
         quit()
@@ -86,21 +142,5 @@ def compress(file_path, target_filesize=25):
     ffmpeg.run(output_vid)
 
 
-def find_file():
-    file_path = filedialog.askopenfilename()
-    if file_path:
-        print(f"Filepath is {file_path}")
-    return file_path
-
-
-def find_save_directory():
-    save_directory = filedialog.askdirectory()
-    if save_directory:
-        print(f"Saving to {save_directory}")
-        return save_directory
-    return None
-
-
 if __name__ == "__main__":
-    file_path = find_file()
-    compress(file_path)
+  window = Gui_Window()
