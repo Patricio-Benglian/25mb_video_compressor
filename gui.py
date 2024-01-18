@@ -13,6 +13,7 @@ class Gui_Window:
     self.file_path = None
     self.save_directory = None
     self.slider_filesize = 25
+    self.muted = False
     # Tkinter gfx init
     self.root = tk.Tk() # Create the base window
     self.root.title("Video Compressor")  # Title of the Window
@@ -38,7 +39,11 @@ class Gui_Window:
 
     # Compression Widget
     self.compress_button = tk.Button(self.root, text="Compress", command=partial(self.compress))
-    self.compress_button.pack(pady=20, padx=30, anchor="w")
+    self.compress_button.pack(side="left", pady=20, padx=30)
+
+    # Mute Widget
+    self.mute_button = tk.Checkbutton(self.root, text="Mute?", command=partial(self.mute))
+    self.mute_button.pack(side="right", pady=20, padx=30)
 
     # Loops (like a console)
     # Updates GUI and checks for events (widget updates)
@@ -72,6 +77,10 @@ class Gui_Window:
     # Maybe have an error text if none was selected?
     else:
       print("No file selected")
+
+  def mute(self):
+    self.muted = not self.muted
+    print(f"Mute status: {self.muted}")
 
   def compress(self):
 
@@ -157,14 +166,24 @@ class Gui_Window:
 
     # Save the new video
     input_vid = ffmpeg.input(file_path)
-    output_vid = input_vid.output(
-        output_file_path,
-        acodec="aac",
-        vcodec="h264",
-        video_bitrate=new_video_bitrate,
-        audio_bitrate=new_audio_bitrate,
-        format="mp4",
-    )
+    if self.muted == False:
+      output_vid = input_vid.output(
+          output_file_path,
+          acodec="aac",
+          vcodec="h264",
+          video_bitrate=new_video_bitrate,
+          audio_bitrate=new_audio_bitrate,
+          format="mp4",
+      )
+    if self.muted == True:
+      output_vid = input_vid.output(
+          output_file_path,
+          acodec="aac",
+          vcodec="h264",
+          video_bitrate=new_video_bitrate+new_audio_bitrate,
+          an=None,
+          format="mp4",
+      )
     ffmpeg.run(output_vid)
 
     # Reset tkinter window to defaults when finished
